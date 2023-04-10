@@ -1,10 +1,14 @@
+import os
 import time
 import random
 from selenium import webdriver
 from pyquery import PyQuery
 
 # Set the target medio
-medio = 'biobiochile'
+medio = 'teletrece'
+
+# Make dirs
+os.makedirs(f'data/posts/{medio}', exist_ok=True)
 
 # Initialize the webdriver and navigate to Instagram
 driver = webdriver.Chrome()
@@ -17,7 +21,7 @@ driver.get(f'https://www.instagram.com/{medio}')
 page_index = 0
 previous_post_codes = ['']
 scroll_attempts = 0
-max_scroll_attempts = 5
+max_scroll_attempts = 10
 
 # Record the start time
 start_time = time.time()
@@ -34,7 +38,9 @@ while True:
     # If the last code on the current page is the same as the last code on the previous page, we've reached the end of the posts
     if current_post_codes[-1] == previous_post_codes[-1]:
         scroll_attempts += 1
+        print('Scroll attempts:', scroll_attempts)
         if scroll_attempts >= max_scroll_attempts:
+            print('Too many attempts')
             break
     else:
         scroll_attempts = 0
@@ -51,7 +57,7 @@ while True:
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
     # Add a random sleep to avoid bot detection
-    time.sleep(random.uniform(2, 3))
+    time.sleep(random.uniform(4, 5))
 
     # Print the current page index and the time elapsed since the loop started
     page_index += 1
