@@ -89,7 +89,7 @@ while True:
     # Retrieve the post data for the current page
     posts_data = get_data_requests(username, 'posts_data')
     posts_data = [item for item in posts_data if item['code'] not in codes]
-    codes.add([item['code'] for item in posts_data])
+    codes = codes.union([item['code'] for item in posts_data])
 
     # Write the page source and codes to disk
     with open(f"data/{username}/posts/data_{str(page_index).zfill(4)}.json", 'w', encoding="utf-8") as f:
