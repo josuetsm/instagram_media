@@ -21,7 +21,8 @@ def get_data_requests(username, data_type):
     # If the data type is post data, retrieve the request and extract the data
     if data_type == "posts_data":
         posts_data_request = [request for request in driver.requests
-                              if request.method == 'GET' and f'https://www.instagram.com/api/v1/feed/user' in request.url][-3:]
+                              if request.method == 'GET' and
+                              f'https://www.instagram.com/api/v1/feed/user' in request.url]
         # Retrieve the post data from each request and return as a list
         posts_data = [json.loads(gzip.decompress(request.response.body)) for request in posts_data_request]
         return sum([post_data['items'] for post_data in posts_data], [])
@@ -100,6 +101,9 @@ while True:
 
     # Update the previous post codes variable and scroll down to load more posts
     previous_post_codes = current_post_codes.copy()
+
+    # Delete requests
+    del driver.requests
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
     # Add a random sleep to avoid bot detection
@@ -107,4 +111,9 @@ while True:
 
     # Print the current page index and the time elapsed since the loop started
     page_index += 1
+
+    # Iterate over the posts and stop when a post before October 1, 2018 is found
+    if sum([item['device_timestamp'] < 1538352000000 for item in posts_data]) > 0:
+        break
+
     print(f"Scraped {page_index} pages in {time.time() - start_time:.2f} seconds")
