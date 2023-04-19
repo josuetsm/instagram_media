@@ -83,16 +83,16 @@ while True:
             break
     else:
         scroll_attempts = 0
+    # Retrieve the post data for the current page
     for attempts in range(10):
-    	try:
-	    # Retrieve the post data for the current page
-	    posts_data = get_data_requests(username, 'posts_data')
-	except:
-	    print('Retry get data requests')
-	    time.sleep(random.uniform(3, 4))
-	else:
-	    print('else')
-	    break
+        try:
+            posts_data = get_data_requests(username, 'posts_data')
+        except:
+            print('Retry get data requests')
+            time.sleep(random.uniform(3, 4))
+        else:
+            print('else')
+            break
     posts_data = [item for item in posts_data if item['code'] not in codes]
     codes = codes.union([item['code'] for item in posts_data])
     # Write the page source and codes to disk
