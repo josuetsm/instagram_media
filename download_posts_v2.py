@@ -113,7 +113,7 @@ while True:
     page_index += 1
 
     # Iterate over the posts and stop when a post before October 1, 2018 is found
-    if sum([item['device_timestamp'] < 1538352000000 for item in posts_data]) > 0:
+    if sum([item['taken_at'] < 1538352000 for item in posts_data]) > 0:
         break
 
     print(f"Scraped {page_index} pages in {time.time() - start_time:.2f} seconds")
